@@ -39,14 +39,24 @@ THIRD_PARTY_APPS  = [
     'django_extensions',
     'phonenumber_field',
 ]
+ALLAUTH_APPS = [
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+]
 
 LOCAL_APPS = [
     # add local apps which you create with startapp
+    # Custom User model
     'customuser',
+    # other created apps
+    'apps.dashboard',
+
 ]
 
 # combine the apps
-INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + ALLAUTH_APPS + LOCAL_APPS
 
 # Auth user
 AUTH_USER_MODEL = 'customuser.User'
@@ -59,6 +69,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # for allauth
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -66,7 +78,9 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            'templates/'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -112,6 +126,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
+AUTHENTIFICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -138,3 +157,34 @@ PHONENUMBER_DEFAULT_FORMAT = 'E164'
 
 # email
 EMAIL_BACKEND = env('EMAIL_BACKEND')
+
+# for allauth
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_LOGIN_BY_CODE_ENABLED = True
+ACCOUNT_LOGIN_BY_CODE_MAX_ATTEMPTS = 3
+ACCOUNT_LOGIN_BY_CODE_TIMEOUT = 300 # number of seconds i.e. 300s is 5 min
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
+ACCOUNT_REAUTHENTICATION_TIMEOUT = 300 # number of seconds i.e. 300s is 5 min
+ACCOUNT_SIGNUP_FORM_HONEYPOT_FIELD = 'country'
+ACCOUNT_SIGNUP_REDIRECT_URL = '/dashboard/'
+ACCOUNT_USER_MODEL_EMAIL_FIELD = 'email'
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USERNAME_REQUIRED = False
+
+ACCOUNT_FORMS = {
+    'add_email': 'allauth.account.forms.AddEmailForm',
+    'change_password': 'allauth.account.forms.ChangePasswordForm',
+    'confirm_login_code': 'allauth.account.forms.ConfirmLoginCodeForm',
+    'login': 'allauth.account.forms.LoginForm',
+    'request_login_code': 'allauth.account.forms.RequestLoginCodeForm',
+    'reset_password': 'allauth.account.forms.ResetPasswordForm',
+    'reset_password_from_key': 'allauth.account.forms.ResetPasswordKeyForm',
+    'set_password': 'allauth.account.forms.SetPasswordForm',
+    'signup': 'allauth.account.forms.SignupForm',
+    'user_token': 'allauth.account.forms.UserTokenForm',
+}
+
+ACCOUNT_ADAPTER = 'customuser.adapter.MyAccountAdapter'
+
+SOCIALACCOUNT_PROVIDERS = {}

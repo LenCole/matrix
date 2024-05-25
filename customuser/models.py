@@ -4,7 +4,6 @@ from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.mail import send_mail
 
-
 class CustomUserManager(UserManager):
     def _create_user(self, email, password, **extra_fields):
         if not email:
