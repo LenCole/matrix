@@ -52,7 +52,7 @@ LOCAL_APPS = [
     'customuser',
     # other created apps
     'apps.dashboard',
-
+    'apps.lookups',
 ]
 
 # combine the apps
