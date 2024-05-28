@@ -51,6 +51,7 @@ LOCAL_APPS = [
     # Custom User model
     'customuser',
     # other created apps
+    'apps.abstractmodels',
     'apps.dashboard',
     'apps.lookups',
 ]

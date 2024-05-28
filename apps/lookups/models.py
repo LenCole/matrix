@@ -1,4 +1,6 @@
 from django.db import models
+from apps.abstractmodels.models import BaseModel
+
 
 class AutoMetaModelBase(models.base.ModelBase):
     def __new__(cls, name, bases, attrs):
@@ -10,7 +12,7 @@ class AutoMetaModelBase(models.base.ModelBase):
             meta.verbose_name_plural = class_name
         return new_class
 
-class BaseLookupsModel(models.Model, metaclass=AutoMetaModelBase):
+class BaseLookupsModel(BaseModel, metaclass=AutoMetaModelBase):
     name = models.CharField(max_length=50)
 
     class Meta:
